@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibemusic — O Pulso da Música Contemporânea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-dark: #0b0914;
+      --bg-card: #141126;
+      --bg-card-hover: #1c1836;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --accent-neon: #a855f7;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .brand-text {
+      font-family: var(--font-heading);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(11, 9, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+    }
+
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      width: 320px;
+    }
+
+    .search-bar input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      margin-left: 0.5rem;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-icon {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 2.5rem;
+    }
+
+    .filter-tags {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      scrollbar-width: none;
+    }
+
+    .filter-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .filter-tag.active {
+      background: var(--accent-purple);
+      color: white;
+      border-color: var(--accent-purple);
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-purple);
+      transition: all 0.3s ease;
+    }
+
+    .post-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .post-content {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .post-category {
+      color: var(--accent-cyan);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .post-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .post-excerpt {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .widget-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-purple);
+    }
+
+    .audio-player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .track-cover {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .play-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-purple);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .article-header-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 1rem 0 1.5rem 0;
+    }
+
+    .article-body-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      margin-bottom: 2rem;
+      white-space: pre-line;
+    }
+
+    .close-modal-icon {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      .search-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <a href="#" class="logo">
+        <div class="logo-icon"><i data-lucide="disc"></i></div>
+        <span class="brand-text">vibemusic</span>
+      </a>
+
+      <div class="search-bar">
+        <i data-lucide="search" style="color: var(--text-muted);"></i>
+        <input type="text" id="searchInput" placeholder="Buscar por artistas, matérias...">
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-icon" id="themeToggle" title="Alternar Tema">
+          <i data-lucide="sun"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <main>
+      <div class="filter-tags" id="filterContainer">
+        <button class="filter-tag active" data-category="todos">Todos</button>
+        <button class="filter-tag" data-category="Indie">Indie</button>
+        <button class="filter-tag" data-category="Hip-Hop">Hip-Hop</button>
+        <button class="filter-tag" data-category="Electronic">Eletrônica</button>
+        <button class="filter-tag" data-category="Rock">Rock</button>
+        <button class="filter-tag" data-category="Pop">Pop</button>
+        <button class="filter-tag" data-category="Entrevista">Entrevistas</button>
+      </div>
+
+      <div class="posts-grid" id="postsGrid"></div>
+    </main>
+
+    <aside>
+      <div class="sidebar-widget">
+        <h3 class="widget-title"><i data-lucide="radio"></i> Vibe Player</h3>
+        <div class="audio-player">
+          <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400" alt="Capa da faixa" class="track-cover">
+          <h4>Midnight Pulse</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Synthwave Central</p>
+
+          <div class="player-controls">
+            <button class="btn-icon"><i data-lucide="skip-back"></i></button>
+            <button class="play-btn"><i data-lucide="play"></i></button>
+            <button class="btn-icon"><i data-lucide="skip-forward"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-widget">
+        <h3 class="widget-title"><i data-lucide="sparkles"></i> Sobre o vibemusic</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          Seu portal independente com as melhores novidades, resenhas de álbuns, análises de produção e entrevistas sobre a cena musical contemporânea.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Modal Leitor de Artigo Completo -->
+  <div class="modal-overlay" id="articleModalOverlay">
+    <div class="modal-content" id="articleModalContent">
+      <button class="close-modal-icon" onclick="closeArticleModal()"><i data-lucide="x"></i></button>
+      <div id="articleFullView"></div>
+    </div>
+  </div>
+
+  <script>
+    const initialPosts = [
+      {
+        id: 1,
+        title: "O Renascimento do Synthwave na Cena Eletrônica Atual",
+        category: "Electronic",
+        excerpt: "Análise profunda sobre como os sintetizadores vintage dos anos 80 continuam moldando as produções eletrônicas modernas.",
+        content: `O Synthwave não é apenas uma nostalgia passageira dos anos 1980; tornou-se uma das forças estéticas e musicais mais influentes da música eletrônica contemporânea. Com produções caracterizadas por sintetizadores analógicos arpejados, drum machines encorpadas e timbres hipnóticos, o gênero conquistou tanto o underground quanto grandes produções de cinema e games.
+
+Nos últimos anos, artistas contemporâneos resgataram equipamentos como o Roland Juno-106 e o Prophet-5 para criar atmosferas cinematográficas. A combinação do design de som retrô com técnicas modernas de mixagem e compressão permitiu que o estilo soasse limpo nas pistas de dança, sem perder a textura vintage.
+
+Além disso, a estética visual do Synthwave — repleta de neon, gradientes roxos e imagens retrofuturistas — tornou-se uma marca registrada na cultura pop. O futuro do gênero promete ainda mais fusões com o Synthpop moderno e o Industrial Techno.`,
+        image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800",
+        date: "20 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 142
+      },
+      {
+        id: 2,
+        title: "Entrevista Exclusiva: Os Bastidores do Novo Álbum da Banda Eco Nova",
+        category: "Entrevista",
+        excerpt: "Conversamos com os integrantes sobre seu processo criativo, gravação analógica e inspirações para o novo disco.",
+        content: `A banda Eco Nova acaba de lançar seu aguardado terceiro álbum de estúdio, e o resultado é uma obra-prima de arranjos orgânicos e timbres espaciais. Em conversa exclusiva com o vibemusic, o vocalista e produtor do grupo revelou os detalhes da gravação realizada em um estúdio isolado na serra.
+
+"Decidimos abrir mão de instrumentos virtuais neste trabalho. Gravamos tudo em fita magnética analógica de 2 polegadas para capturar o ar e a imperfeição natural da execução ao vivo", explica o vocalista.
+
+O álbum aborda temas como conexão humana, sustentabilidade e a busca por desacelerar em um mundo digital acelerado. Com turnê nacional confirmada para os próximos meses, a banda promete levar esse mesmo som quente e imersivo para os palcos.`,
+        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800",
+        date: "19 Set, 2026",
+        author: "Lucas Silveira",
+        likes: 89
+      },
+      {
+        id: 3,
+        title: "A Revolução dos Beats Lo-Fi e seu Impacto no Hip-Hop",
+        category: "Hip-Hop",
+        excerpt: "Como uma subcultura de produtores caseiros redefiniu a forma como consumimos e produzimos rap experimental.",
+        content: `O Lo-Fi Hip-Hop deixou de ser apenas um som de fundo para estudos e transformou-se em um movimento cultural global. Caracterizado por ritmos desacelerados, chiados de disco de vinil e samplers nostálgicos de piano e jazz, o subgênero provou que a produção caseira possui um valor artístico inestimável.
+
+Grande parte do apelo do Lo-Fi reside no seu sentimento de intimidade e acolhimento. Em uma época dominada por produções hiper-comprimidas e perfeccionistas, os pequenos erros, as oscilações de afinação e o ruído de fundo oferecem uma sensação de humanidade e conforto emocional aos ouvintes.
+
+Produtores independentes estão monetizando suas faixas diretamente em serviços de streaming e plataformas de licensing, provando que um estúdio caríssimo não é mais pré-requisito para alcançar milhões de ouvintes pelo mundo.`,
+        image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800",
+        date: "18 Set, 2026",
+        author: "Mariana Costa",
+        likes: 210
+      },
+      {
+        id: 4,
+        title: "Rock Psicodélico e a Nova Onda de Festivais Independentes",
+        category: "Rock",
+        excerpt: "Descubra como o rock autoral está reconquistando os palcos em festivais comunitários e underground.",
+        content: `Longe das grandes arenas e circuitos comerciais, uma nova cena de rock psicodélico e autoral ganha força em festivais independentes espalhados pelo país. Com pedais de fuzz, longas jams instrumentais e iluminação psicodélica analógica, o público encontra nesses eventos uma experiência sensorial imersiva.
+
+Os organizadores desses festivais priorizam a comunidade e a diversidade sonora. Em vez de focarem apenas em grandes nomes conhecidos, a programação é montada dando destaque igual a bandas emergentes e coletivos de arte local.
+
+Essa movimentação descentralizada reforça a resiliência do rock como gênero experimental e dinâmico, provando que a energia do palco autoral continua mais viva e relevante do que nunca.`,
+        image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800",
+        date: "17 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 95
+      },
+      {
+        id: 5,
+        title: "Guia Básico de Home Studio: Produza Músicas de Qualidade em Casa",
+        category: "Electronic",
+        excerpt: "Equipamentos essenciais, tratamento acústico e softwares recomendados para iniciar sua jornada na produção.",
+        content: `Montar um home studio funcional hoje em dia é muito mais acessível do que há uma década. Com os avanços das interfaces de áudio e dos monitores de referência de entrada, é possível alcançar resultados profissionais em um quarto de apartamento.
+
+O primeiro passo é investir em uma boa interface de áudio USB com conversores limpos e um par de monitores de áudio de resposta plana. O tratamento acústico básico do ambiente — com painéis de absorção estrategicamente posicionados — costuma fazer mais diferença na qualidade final da mixagem do que microfones extremamente caros.
+
+Escolher uma DAW (Digital Audio Workstation) que se adapte ao seu fluxo de trabalho, como Ableton Live, Logic Pro ou FL Studio, completa a base necessária para transformar suas ideias musicais em faixas prontas para o lançamento.`,
+        image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800",
+        date: "16 Set, 2026",
+        author: "Rafael Mello",
+        likes: 312
+      },
+      {
+        id: 6,
+        title: "O Retorno Estrondoso dos Discos de Vinil entre a Geração Z",
+        category: "Indie",
+        excerpt: "Pesquisas indicam aumento histórico na venda de LPs impulsionado por colecionadores jovens em busca de experiência tátil.",
+        content: `Na era do streaming ilimitado e imediato, pode parecer paradoxal que o formato analógico do disco de vinil continue quebrando recordes de vendas ano a ano. Contudo, para a Geração Z, o vinil representa um ritual consciente de appreciation musical.
+
+Diferente do consumo fragmentado de playlists aleatórias, colocar um LP na vitrola exige parar, olhar o encarte, admirar a arte de capa e ouvir o álbum na sequência planejada pelo artista.
+
+Além disso, os discos tornaram-se itens de coleção e decoração que expressam a identidade do ouvinte. O movimento incentivou inclusive o surgimento de novas fábricas de prensagem e lojas independentes de discos nas grandes metrópoles.`,
+        image: "https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?w=800",
+        date: "15 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 178
+      },
+      {
+        id: 7,
+        title: "Pop Alternativo: Artistas que Estão Desafiando as Fórmulas Comerciais",
+        category: "Pop",
+        excerpt: "Conheça os cantores e produtoras que estão fundindo pop, música experimental e lirismo poético.",
+        content: `O Pop Alternativo consolidou-se como um dos espaços mais férteis para inovação na indústria fonográfica. Ao misturar estruturas melódicas marcantes com timbres eletrônicos arrojados e letras introspectivas, os artistas dessa vertente recusam a fórmula genérica do pop comercial tradicional.
+
+Nomes emergentes da cena combinam influências que vão desde o R&B futurista até a música folclórica e o hyperpop. Essa mistura sem barreiras resulta em faixas dinâmicas que surpreendem o ouvinte a cada compasso.
+
+As redes sociais e as playlists curadas desempenham papel fundamental na divulgação desses talentos, permitindo que públicos globais descubram músicas autênticas que desafiam os padrões vigentes.`,
+        image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+        date: "14 Set, 2026",
+        author: "Camila Torres",
+        likes: 120
+      },
+      {
+        id: 8,
+        title: "Como a Inteligência Artificial Está Sendo Usada por Produtores de Hip-Hop",
+        category: "Hip-Hop",
+        excerpt: "Ferramentas de IA para separação de stems, mixagem inteligente e geração de ideias melódicas.",
+        content: `A inteligência artificial transformou-se em uma aliada no processo criativo da produção de Hip-Hop. Longe de substituir a sensibilidade do produtor, os novos algoritmos são utilizados para acelerar etapas técnicas e inspirar novos arranjos.
+
+Uma das aplicações mais revolucionárias é a separação de stems por IA, que permite isolar vocais, baterias e baixos de gravações antigas com clareza sem precedentes para amostragem (sampling).
+
+Outra frente forte é a otimização da mixagem, onde plugins de equalização e compressão assistida analisam o espectro de frequências em tempo real e sugerem ajustes precisos. O toque final e a alma do beat, no entanto, continuam sob o domínio do criador humano.`,
+        image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800",
+        date: "13 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 245
+      },
+      {
+        id: 9,
+        title: "Festivais Internacionais de Música: O que Esperar para a Próxima Temporada",
+        category: "Indie",
+        excerpt: "Tendências de line-ups, sustentabilidade nos palcos e novas tecnologias de som imersivo.",
+        content: `A temporada internacional de festivais promete grandes transformações na experiência do público. Com um foco renovado em sustentabilidade ambiental e inovação tecnológica, os organizadores estão redefinindo a infraestrutura dos palcos.
+
+Uso de energia limpa (solar e de baterias), redução drástica de plásticos de uso único e logística de transporte sustentável tornaram-se compromissos centrais de grandes eventos globais.
+
+No campo sonoro, a implementação de sistemas de áudio espacial imersivo garante que o espectador tenha uma qualidade de audição perfeita em qualquer ponto do gramado, elevando o padrão de produções ao vivo.`,
+        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+        date: "12 Set, 2026",
+        author: "Thiago Lima",
+        likes: 164
+      },
+      {
+        id: 10,
+        title: "A Evolução das Subfrequências: O Poder do Sub-grave no Bass Music",
+        category: "Electronic",
+        excerpt: "Explorando as técnicas de sintetização de graves potentes sem poluir o espectro audível.",
+        content: `No universo do Bass Music (Dubstep, Drum & Bass, UK Garage), as subfrequências situadas entre 30 Hz e 60 Hz são o coração da pista de dança. Criar um sub-grave limpo, profundo e ao mesmo tempo audível em sistemas de som menores é um dos maiores desafios da engenharia de áudio.
+
+Produtores renomados utilizam ondas senoidais puras combinadas com saturação harmônica suave. Isso adiciona frequências superiores que permitem ao cérebro humano perceber o grave mesmo em fones de ouvido comuns.
+
+Garantir que o sub-grave e o bumbo (kick) não disputem o mesmo espaço na mixagem — técnica conhecida como sidechain compression — é o segredo para manter o som potente e cristalino.`,
+        image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800",
+        date: "11 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 130
+      },
+      {
+        id: 11,
+        title: "Entrevista com a DJ e Produtora Maya: 'Minha Música Veio das Ruas'",
+        category: "Entrevista",
+        excerpt: "Maya conta sobre sua trajetória de tocar em festas clandestinas até os maiores festivais globais.",
+        content: `Em um bate-papo sincero com o vibemusic, a DJ Maya relembrou o início de sua carreira tocando com equipamentos emprestados em festas comunitárias antes de ganhar projeção em grandes clubes.
+
+"O que me move sempre foi a energia da pista e a troca com as pessoas. Quando você começa no underground, aprende a ler o público de verdade, sem depender de produções pirotécnicas", comenta a artista.
+
+Maya também adiantou detalhes de sua nova gravadora independente, que terá como objetivo lançar novos talentos da música eletrônica urbana de periferias.`,
+        image: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=800",
+        date: "10 Set, 2026",
+        author: "Mariana Costa",
+        likes: 198
+      },
+      {
+        id: 12,
+        title: "Os Melhores Pedais de Efeito para Criar Texturas Ambientais na Guitarra",
+        category: "Rock",
+        excerpt: "Reverb shimmer, delays modulares e fuzzes alternativos para construir paisagens sonoras únicas.",
+        content: `A guitarra elétrica evoluiu muito além dos tradicionais solos de rock. Na cena de Ambient Rock e Post-Rock, o instrumento é utilizado quase como um sintetizador modulado para criar atmosferas e paisagens sonoras densas.
+
+Pedais de Reverb com efeito Shimmer adicionam oitavas superiores celestiais à cauda do som, enquanto Delays de fita analógicos oferecem repetições quentes com modulação suave.
+
+A combinação estratégica desses pedais no pedalboard permite que o guitarrista preencha o ambiente com texturas emotivas e profundas sem a necessidade de teclados de suporte.`,
+        image: "https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800",
+        date: "09 Set, 2026",
+        author: "Lucas Silveira",
+        likes: 87
+      },
+      {
+        id: 13,
+        title: "As Principais Plataformas de Distribuição Musical Independente",
+        category: "Indie",
+        excerpt: "Comparativo entre DistroKid, TuneCore e CD Baby para colocar suas faixas no Spotify e Apple Music.",
+        content: `Lançar música de forma independente nunca foi tão direto. As distribuidoras digitais atuam como ponte entre o músico e plataformas globais como Spotify, Apple Music, Deezer e YouTube Music.
+
+Enquanto serviços como DistroKid e TuneCore cobram uma assinatura anual fixa para lançamentos ilimitados, plataformas como a CD Baby cobram uma taxa única por single/álbum, mantendo uma pequena comissão sobre os direitos autorais.
+
+A escolha ideal depende do ritmo de produção do artista. Músicos prolíficos beneficiam-se dos planos de taxa anual fixa, enquanto projetos pontuais preferem modelos de pagamento único.`,
+        image: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=800",
+        date: "08 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 276
+      },
+      {
+        id: 14,
+        title: "Vocal Tuning Moderno: Autotune vs Melodyne na Produção Pop",
+        category: "Pop",
+        excerpt: "Descubra quando utilizar afinação natural transparente ou efeitos robóticos estilizados.",
+        content: `A afinação vocal é um padrão consolidado na produção musical contemporânea, dividindo-se entre duas abordagens principais: a correção transparente e o efeito criativo estilizado.
+
+O Celemony Melodyne é a ferramenta preferida para afinação gráfica detalhada. Ele permite ajustar notas, formantes e vibração de forma imperceptível ao ouvinte, mantendo a naturalidade da interpretação humana.
+
+Já o Antares Auto-Tune é famoso tanto pelo ajuste rápido quanto pelo tom estilizado 'hard-tune', característico de gêneros como Trap, Reggaeton e Pop Futurista. Ambas as ferramentas são complementares na rotina de um engenheiro de mixagem.`,
+        image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800",
+        date: "07 Set, 2026",
+        author: "Rafael Mello",
+        likes: 153
+      },
+      {
+        id: 15,
+        title: "A História Esquecida do Afrobeat e seu Impacto no Pop Global",
+        category: "Pop",
+        excerpt: "Das raízes nigerianas aos topos das paradas mundiais de streaming.",
+        content: `Pioneirado pelo mestre Fela Kuti na Nigéria durante os anos 1970, o Afrobeat original combinava elementos de jazz, funk e ritmos tradicionais iorubás em composições de forte teor político e social.
+
+Nas últimas décadas, a evolução para o Afrobeats (com 's') fundiu essas raízes rítmicas com a produção pop eletrônica, R&B e Dancehall, dominando as paradas internacionais e rádios globais.
+
+Artistas contemporâneos provaram que os ritmos africanos possuem apelo universal, remodelando a estética sonora do pop mundial e inspirando colaborações entre continentes.`,
+        image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800",
+        date: "06 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 209
+      },
+      {
+        id: 16,
+        title: "Sampling Ético: Como Limpar Amostras e Evitar Processos de Direitos Autorais",
+        category: "Hip-Hop",
+        excerpt: "Regras jurídicas e caminhos práticos para usar trechos de outras músicas legalmente.",
+        content: `O uso de samples é uma das pedras fundamentais da cultura Hip-Hop e da música eletrônica. No entanto, lançar faixas com trechos não autorizados de outras obras pode resultar no bloqueio da música em plataformas e processos judiciais.
+
+Para utilizar um sample comercialmente, é necessário obter a liberação de dois direitos: o direito autoral da composição (editora) e o direito do fonograma gravado (gravadora).
+
+Plataformas modernas de amostragem pré-liberada, como o Splice e Loopcloud, além de serviços de clearance simplificado como Tracklib, facilitam a vida dos produtores ao oferecerem catálogos 100% legais para uso em produções autorais.`,
+        image: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800",
+        date: "05 Set, 2026",
+        author: "Camila Torres",
+        likes: 184
+      },
+      {
+        id: 17,
+        title: "Baterias Eletrônicas Clássicas: De TR-808 a TR-909 no Techno",
+        category: "Electronic",
+        excerpt: "Por que esses módulos criados nos anos 80 ainda definem os ritmos da dance music.",
+        content: `Lançadas pela Roland no início dos anos 80, as baterias eletrônicas TR-808 e TR-909 foram inicialmente consideradas fracassos comerciais por não soarem exatamente como baterias acústicas reais.
+
+No entanto, produtores pioneiros de Chicago e Detroit adotaram esses sintetizadores rítmicos justamente por seus sons sintéticos únicos: o grave ressonante da 808 e a caixa/chimbal cortantes da 909 tornaram-se os alicerces do Techno e do House Music.
+
+Hoje, os timbres dessas máquinas continuam sendo reverenciados e recriados em praticamente todas as produções de música urbana e eletrônica ao redor do planeta.`,
+        image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800",
+        date: "04 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 167
+      },
+      {
+        id: 18,
+        title: "O Crescimento do Post-Punk Revival nas Américas",
+        category: "Rock",
+        excerpt: "Linhas de baixo marcantes, guitavras cortantes e sintetizadores minimalistas encantam nova geração.",
+        content: `O Post-Punk vive uma nova era de ouro. Com suas linhas de baixo pulsantes, guitarras rítmicas angularmente afiadas e vocais barítonos expressivos, o gênero conquistou ouvintes que buscam uma sonoridade crua e direta.
+
+Bandas independentes da América Latina têm se destacado ao incorporar elementos locais e letras em espanhol e português à estética sombria e dançante do estilo.
+
+A força do movimento se reflete nas casas de shows lotadas e no engajamento orgânico das redes, mostrando que a urgência sonora do Post-Punk permanece extremamente atual.`,
+        image: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800",
+        date: "03 Set, 2026",
+        author: "Thiago Lima",
+        likes: 112
+      },
+      {
+        id: 19,
+        title: "Entrevista com o Engenheiro de Mixagem Lucas Silva: 'O Segredo Está na Dinâmica'",
+        category: "Entrevista",
+        excerpt: "Dicas valiosas sobre equilíbrio de frequências, compressão paralela e profundidade 3D na mix.",
+        content: `Com diversos discos premiados no currículo, o engenheiro de áudio Lucas Silva conversou conosco sobre a filosofia por trás de uma mixagem equilibrada e empolgante.
+
+"O maior erro que vejo em produtores iniciantes é tentar deixar tudo no volume máximo o tempo todo. A emoção da música vem do contraste: o verso precisa respirar para que o refrão pareça gigante", explica Lucas.
+
+Ele também compartilhou detalhes sobre o uso de compressão paralela para dar peso às baterias sem destruir os transientes naturais do instrumento.`,
+        image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800",
+        date: "02 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 290
+      },
+      {
+        id: 20,
+        title: "Musicais Imersivos e Realidade Virtual: O Futuro dos Shows ao Vivo",
+        category: "Electronic",
+        excerpt: "Como palcos virtuais no metaverso e fones de áudio espacial estão redefinindo apresentações.",
+        content: `A experiência de ir a um show de música está se expandindo para além das barreiras físicas. Apresentações em realidade virtual (VR) e plataformas digitais interativas oferecem aos fãs a chance de assistir a seus artistas favoritos de ângulos impossíveis em um estádio tradicional.
+
+Com o avanço dos óculos de VR leves e do áudio espacial 3D, o espectador pode andar pelo palco, interagir com outros fãs em tempo real e visualizar efeitos visuais surrealistas que seriam inviáveis no mundo real.
+
+Embora o calor da multidão em um show presencial seja insubstituível, as apresentações imersivas virtuais surgem como um novo formato complementar e acessível para fãs do mundo inteiro.`,
+        image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800",
+        date: "01 Set, 2026",
+        author: "Redação Vibemusic",
+        likes: 145
+      }
+    ];
+
+    let posts = [...initialPosts];
+    let currentCategory = 'todos';
+
+    function renderPosts(items) {
+      const grid = document.getElementById('postsGrid');
+      grid.innerHTML = '';
+
+      if (items.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); margin: 3rem 0;">Nenhum artigo encontrado.</p>`;
+        return;
+      }
+
+      items.forEach(post => {
+        const card = document.createElement('article');
+        card.className = 'post-card';
+        card.onclick = () => openArticle(post.id);
+        card.innerHTML = `
+          <img src="${post.image}" alt="${post.title}" class="post-thumb">
+          <div class="post-content">
+            <span class="post-category">${post.category}</span>
+            <h3 class="post-title">${post.title}</h3>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <div class="post-footer">
+              <span>${post.date}</span>
+              <span><i data-lucide="heart" style="width: 14px; height: 14px; display: inline;"></i> ${post.likes}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    window.openArticle = function(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      const fullView = document.getElementById('articleFullView');
+      fullView.innerHTML = `
+        <span class="post-category">${post.category}</span>
+        <h1 style="font-size: 1.8rem; margin: 0.5rem 0 0.75rem 0; line-height: 1.3;">${post.title}</h1>
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; display: flex; gap: 1rem;">
+          <span>Por: <strong>${post.author || 'Redação'}</strong></span>
+          <span>•</span>
+          <span>${post.date}</span>
+        </div>
+        <img src="${post.image}" alt="${post.title}" class="article-header-img">
+        <div class="article-body-text">${post.content}</div>
+        
+        <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 2rem;">
+          <h4 style="margin-bottom: 1rem;">Comentários</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Seja o primeiro a comentar nesta matéria!</p>
+        </div>
+      `;
+
+      document.getElementById('articleModalOverlay').style.display = 'flex';
+      lucide.createIcons();
+    };
+
+    window.closeArticleModal = function() {
+      document.getElementById('articleModalOverlay').style.display = 'none';
+    };
+
+    document.getElementById('filterContainer').addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-tag')) {
+        document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentCategory = e.target.dataset.category;
+        filterPosts();
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', filterPosts);
+
+    function filterPosts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = posts.filter(post => {
+        const matchesCategory = currentCategory === 'todos' || post.category === currentCategory;
+        const matchesSearch = post.title.toLowerCase().includes(query) || post.excerpt.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      });
+      renderPosts(filtered);
+    }
+
+    let isDark = true;
+    document.getElementById('themeToggle').onclick = () => {
+      isDark = !isDark;
+      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    };
+
+    renderPosts(posts);
+    lucide.createIcons();
+  </script>
+</body>
+</html>
